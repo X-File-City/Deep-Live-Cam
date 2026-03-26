@@ -1,0 +1,296 @@
+{
+  "id": "deep-live-cam-onboarding",
+  "title": "Deep-Live-Cam Architecture Tour",
+  "description": "Explore the architecture of Deep-Live-Cam, a real-time face swap application built with Python, InsightFace, and ONNX Runtime",
+  "version": "1.0.0",
+  "audience": "New Contributors & AI Assistants",
+  "prerequisites": [
+    "Basic Python knowledge",
+    "Familiarity with computer vision concepts"
+  ],
+  "steps": [
+    {
+      "id": "step-1-overview",
+      "title": "Project Overview",
+      "description": "Deep-Live-Cam is a real-time face swap and video deepfake application. It enables users to swap faces in images, videos, and live webcam feeds using a single source image. The project uses InsightFace for face detection, ONNX Runtime for model inference, and CustomTkinter for the GUI. All application code lives in the highlighted directory, while the root contains the entry point and configuration.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "highlightLayers": [
+        {
+          "id": "entry-point",
+          "name": "Entry Point",
+          "color": "#ef4444",
+          "items": [
+            { "path": "run.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "app-code",
+          "name": "Application Code",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "modules", "type": "directory" }
+          ],
+          "opacity": 0.5,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "hover-directory",
+          "description": "Hover over the application code directory to explore its contents",
+          "target": "modules"
+        }
+      ]
+    },
+    {
+      "id": "step-2-core-orchestration",
+      "title": "Core Orchestration",
+      "description": "The application flow starts at the entry point, which launches the main workflow orchestrator. It parses command-line arguments, verifies dependencies, loads frame processor modules, sets resource limits, and decides whether to run in headless or GUI mode. Global configuration state — execution provider, face mapping, processing options — is centralized in the highlighted configuration files.",
+      "estimatedTime": 90,
+      "focusDirectory": "modules",
+      "highlightLayers": [
+        {
+          "id": "orchestration",
+          "name": "Orchestration",
+          "color": "#ef4444",
+          "items": [
+            { "path": "modules/core.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "config-state",
+          "name": "Configuration State",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "modules/globals.py", "type": "file" },
+            { "path": "modules/typing.py", "type": "file" },
+            { "path": "modules/metadata.py", "type": "file" },
+            { "path": "modules/paths.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click the orchestrator to see the main workflow logic",
+          "target": "modules/core.py"
+        }
+      ]
+    },
+    {
+      "id": "step-3-ui-layer",
+      "title": "User Interface",
+      "description": "The GUI is built with CustomTkinter and provides both batch and live processing modes. The main interface includes face selection, camera controls, and settings panels. It supports source face selection, target media input including webcam, and real-time preview. Supporting files provide hover help text and platform compatibility patches.",
+      "estimatedTime": 90,
+      "focusDirectory": "modules",
+      "highlightLayers": [
+        {
+          "id": "ui-files",
+          "name": "UI Layer",
+          "color": "#10b981",
+          "items": [
+            { "path": "modules/ui.py", "type": "file" },
+            { "path": "modules/ui_tooltip.py", "type": "file" },
+            { "path": "modules/tkinter_fix.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click the main interface file to see the GUI implementation",
+          "target": "modules/ui.py"
+        }
+      ]
+    },
+    {
+      "id": "step-4-face-analysis",
+      "title": "Face Analysis Engine",
+      "description": "Face detection and recognition is powered by InsightFace. The analyser provides single-face and multi-face detection used throughout the pipeline. A companion clustering module adds embedding analysis for the face mapping feature, which allows mapping specific source faces to specific target faces in multi-face scenarios.",
+      "estimatedTime": 90,
+      "focusDirectory": "modules",
+      "highlightLayers": [
+        {
+          "id": "face-analysis",
+          "name": "Face Analysis",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "modules/face_analyser.py", "type": "file" },
+            { "path": "modules/cluster_analysis.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click the analyser to see the InsightFace integration",
+          "target": "modules/face_analyser.py"
+        }
+      ]
+    },
+    {
+      "id": "step-5-frame-processors",
+      "title": "Frame Processing Pipeline",
+      "description": "The heart of the application is the pluggable frame processor system. The orchestrator loads and chains processors using multi-threading. The swapper performs the actual face swap with caching and interpolation. Three enhancer variants improve output quality at different resolutions. The masking module handles mouth masking and color transfer. Processors are chained — swap first, then enhance.",
+      "estimatedTime": 120,
+      "focusDirectory": "modules/processors/frame",
+      "highlightLayers": [
+        {
+          "id": "processor-core",
+          "name": "Processor Orchestration",
+          "color": "#ef4444",
+          "items": [
+            { "path": "modules/processors/frame/core.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "face-swap",
+          "name": "Face Swapper",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "modules/processors/frame/face_swapper.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "enhancers",
+          "name": "Face Enhancers",
+          "color": "#10b981",
+          "items": [
+            { "path": "modules/processors/frame/face_enhancer.py", "type": "file" },
+            { "path": "modules/processors/frame/face_enhancer_gpen256.py", "type": "file" },
+            { "path": "modules/processors/frame/face_enhancer_gpen512.py", "type": "file" },
+            { "path": "modules/processors/frame/_onnx_enhancer.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "masking",
+          "name": "Face Masking",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "modules/processors/frame/face_masking.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click the swapper to see the main face swap logic",
+          "target": "modules/processors/frame/face_swapper.py"
+        }
+      ]
+    },
+    {
+      "id": "step-6-capture-and-gpu",
+      "title": "Capture, Media & GPU Acceleration",
+      "description": "The capture layer handles real-time webcam input with frame buffering and resolution control, as well as extracting frames from video files. Media utilities wrap FFmpeg for frame extraction, video encoding, and audio restoration. The GPU acceleration module provides CUDA-accelerated operations — blur, sharpen, resize, color conversion — with automatic CPU fallback. A content safety module adds optional NSFW filtering.",
+      "estimatedTime": 90,
+      "focusDirectory": "modules",
+      "highlightLayers": [
+        {
+          "id": "capture",
+          "name": "Video Capture",
+          "color": "#06b6d4",
+          "items": [
+            { "path": "modules/video_capture.py", "type": "file" },
+            { "path": "modules/capturer.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "media-utils",
+          "name": "Media Utilities",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "modules/utilities.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "gpu-layer",
+          "name": "GPU Acceleration",
+          "color": "#22c55e",
+          "items": [
+            { "path": "modules/gpu_processing.py", "type": "file" }
+          ],
+          "opacity": 0.8,
+          "renderStrategy": "fill"
+        },
+        {
+          "id": "safety",
+          "name": "Content Safety",
+          "color": "#ef4444",
+          "items": [
+            { "path": "modules/predicter.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "fill"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click the GPU module to see CUDA acceleration with CPU fallback",
+          "target": "modules/gpu_processing.py"
+        }
+      ]
+    },
+    {
+      "id": "step-7-full-picture",
+      "title": "The Full Picture",
+      "description": "Here's the complete processing pipeline: the entry point launches the orchestrator, which initializes configuration, checks dependencies, and starts either command-line or GUI mode. The user selects a source face and target media. Face analysis detects faces via InsightFace. Frame processors are chained — the swapper performs the swap, enhancers improve quality, and masking refines edges. For video, frames are extracted, processed in parallel threads, then reassembled with audio. GPU acceleration speeds up image operations throughout. The result is real-time face swapping in under a second per frame.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "explore",
+          "description": "Explore the codebase freely — you now know the architecture!"
+        }
+      ],
+      "resources": [
+        {
+          "title": "Deep-Live-Cam README",
+          "url": "https://github.com/hacksider/Deep-Live-Cam",
+          "type": "documentation"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "Claude",
+    "createdAt": "2026-03-26",
+    "tags": [
+      "onboarding",
+      "architecture",
+      "computer-vision",
+      "face-swap"
+    ]
+  }
+}
